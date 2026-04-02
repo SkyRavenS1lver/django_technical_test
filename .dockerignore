@@ -1,0 +1,27 @@
+.git
+.gitignore
+.env
+*.md
+*.pdf
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+.Python
+venv/
+.venv/
+env/
+
+# Django
+staticfiles/
+logs/*.log
+media/
+
+# Node
+theme/static_src/node_modules/
+
+# Dev artifacts
+.pytest_cache/
+.coverage
+coverage/
