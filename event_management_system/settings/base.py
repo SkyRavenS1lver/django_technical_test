@@ -19,9 +19,15 @@ INSTALLED_APPS = [
     # Third-party
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "drf_spectacular",
     "django_filters",
     "django_htmx",
+    # Tailwind
+    "tailwind",
+    "theme",
+    # Local
+    "app.accounts",
 ]
 
 MIDDLEWARE = [
@@ -78,7 +84,20 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
+TAILWIND_APP_NAME = "theme"
+NPM_BIN_PATH = config("NPM_BIN_PATH", default="npm")
+INTERNAL_IPS = ["127.0.0.1"]
+
+AUTH_USER_MODEL = "accounts.User"
+LOGIN_URL = "/auth/login/"
+LOGIN_REDIRECT_URL = "/dashboard/"
+
 STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -111,6 +130,8 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
     "AUTH_HEADER_TYPES": ("Bearer",),
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
