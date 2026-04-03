@@ -4,8 +4,6 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 
-from app.accounts.pages import htmx_redirect
-
 from .models import Event
 
 _WRITE_FIELDS = ("title", "description", "start_date", "end_date", "venue_name", "venue_address", "max_attendees", "status")
@@ -64,7 +62,7 @@ class EventCreateView(LoginRequiredMixin, View):
             errors.update({f: msgs[0] for f, msgs in e.message_dict.items()})
             return render(request, "events/form.html", {"action": "create", "data": data, "errors": errors, "event": None})
 
-        return htmx_redirect(f"/events/{event.slug}/")
+        return redirect(f"/events/{event.slug}/")
 
 
 class EventUpdateView(LoginRequiredMixin, View):
@@ -106,4 +104,4 @@ class EventUpdateView(LoginRequiredMixin, View):
             errors.update({f: msgs[0] for f, msgs in e.message_dict.items()})
             return render(request, "events/form.html", {"action": "edit", "event": event, "data": data, "errors": errors})
 
-        return htmx_redirect(f"/events/{event.slug}/")
+        return redirect(f"/events/{event.slug}/")

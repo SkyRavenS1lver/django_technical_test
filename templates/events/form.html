@@ -3,88 +3,123 @@
 
 {% block content %}
 <div class="max-w-2xl mx-auto">
+
+  <!-- Back -->
+  <a href="{% if action == 'edit' %}/events/{{ event.slug }}/{% else %}/events/{% endif %}"
+     class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 mb-6 transition-colors">
+    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+    </svg>
+    {% if action == "edit" %}Back to Event{% else %}Back to Events{% endif %}
+  </a>
+
   <h1 class="text-2xl font-bold text-gray-900 mb-8">
     {% if action == "edit" %}Edit Event{% else %}Create New Event{% endif %}
   </h1>
 
-  <div class="bg-white rounded-xl border border-gray-200 p-6 sm:p-8">
-    <form hx-post="{% if action == 'edit' %}/events/{{ event.slug }}/edit/{% else %}/events/create/{% endif %}"
-          hx-target="this"
-          hx-swap="outerHTML"
-          class="space-y-5">
-      {% csrf_token %}
+  <form method="post"
+        action="{% if action == 'edit' %}/events/{{ event.slug }}/edit/{% else %}/events/create/{% endif %}"
+        class="space-y-8">
+    {% csrf_token %}
+
+    <!-- Basic info -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+      <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Basic Info</h2>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Title <span class="text-red-500">*</span></label>
         <input type="text" name="title" value="{{ data.title }}" required
-               class="w-full px-3 py-2 border {% if errors.title %}border-red-400{% else %}border-gray-300{% endif %} rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        {% if errors.title %}<p class="text-xs text-red-600 mt-1">{{ errors.title }}</p>{% endif %}
+               placeholder="e.g. PyCon Africa 2026"
+               class="w-full px-3 py-2.5 border {% if errors.title %}border-red-400 bg-red-50{% else %}border-gray-300{% endif %} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+        {% if errors.title %}<p class="text-xs text-red-600 mt-1.5">{{ errors.title }}</p>{% endif %}
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-        <textarea name="description" rows="4" required
-                  class="w-full px-3 py-2 border {% if errors.description %}border-red-400{% else %}border-gray-300{% endif %} rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">{{ data.description }}</textarea>
-        {% if errors.description %}<p class="text-xs text-red-600 mt-1">{{ errors.description }}</p>{% endif %}
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Description <span class="text-red-500">*</span></label>
+        <textarea name="description" rows="5" required
+                  placeholder="What is this event about? Who should attend?"
+                  class="w-full px-3 py-2.5 border {% if errors.description %}border-red-400 bg-red-50{% else %}border-gray-300{% endif %} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none">{{ data.description }}</textarea>
+        {% if errors.description %}<p class="text-xs text-red-600 mt-1.5">{{ errors.description }}</p>{% endif %}
       </div>
+    </div>
+
+    <!-- Schedule -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+      <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Schedule</h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Start Date & Time</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Starts <span class="text-red-500">*</span></label>
           <input type="datetime-local" name="start_date" value="{{ data.start_date }}" required
-                 class="w-full px-3 py-2 border {% if errors.start_date %}border-red-400{% else %}border-gray-300{% endif %} rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          {% if errors.start_date %}<p class="text-xs text-red-600 mt-1">{{ errors.start_date }}</p>{% endif %}
+                 class="w-full px-3 py-2.5 border {% if errors.start_date %}border-red-400 bg-red-50{% else %}border-gray-300{% endif %} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+          {% if errors.start_date %}<p class="text-xs text-red-600 mt-1.5">{{ errors.start_date }}</p>{% endif %}
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">End Date & Time</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Ends <span class="text-red-500">*</span></label>
           <input type="datetime-local" name="end_date" value="{{ data.end_date }}" required
-                 class="w-full px-3 py-2 border {% if errors.end_date %}border-red-400{% else %}border-gray-300{% endif %} rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          {% if errors.end_date %}<p class="text-xs text-red-600 mt-1">{{ errors.end_date }}</p>{% endif %}
+                 class="w-full px-3 py-2.5 border {% if errors.end_date %}border-red-400 bg-red-50{% else %}border-gray-300{% endif %} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+          {% if errors.end_date %}<p class="text-xs text-red-600 mt-1.5">{{ errors.end_date }}</p>{% endif %}
         </div>
       </div>
+    </div>
+
+    <!-- Venue -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+      <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Venue</h2>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Venue Name</label>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Venue Name <span class="text-red-500">*</span></label>
         <input type="text" name="venue_name" value="{{ data.venue_name }}" required
-               class="w-full px-3 py-2 border {% if errors.venue_name %}border-red-400{% else %}border-gray-300{% endif %} rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-        {% if errors.venue_name %}<p class="text-xs text-red-600 mt-1">{{ errors.venue_name }}</p>{% endif %}
+               placeholder="e.g. Sandton Convention Centre"
+               class="w-full px-3 py-2.5 border {% if errors.venue_name %}border-red-400 bg-red-50{% else %}border-gray-300{% endif %} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+        {% if errors.venue_name %}<p class="text-xs text-red-600 mt-1.5">{{ errors.venue_name }}</p>{% endif %}
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Venue Address</label>
-        <textarea name="venue_address" rows="2" required
-                  class="w-full px-3 py-2 border {% if errors.venue_address %}border-red-400{% else %}border-gray-300{% endif %} rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">{{ data.venue_address }}</textarea>
-        {% if errors.venue_address %}<p class="text-xs text-red-600 mt-1">{{ errors.venue_address }}</p>{% endif %}
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Venue Address <span class="text-red-500">*</span></label>
+        <textarea name="venue_address" rows="2"
+                  placeholder="Street, City, Country"
+                  class="w-full px-3 py-2.5 border {% if errors.venue_address %}border-red-400 bg-red-50{% else %}border-gray-300{% endif %} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition resize-none">{{ data.venue_address }}</textarea>
+        {% if errors.venue_address %}<p class="text-xs text-red-600 mt-1.5">{{ errors.venue_address }}</p>{% endif %}
       </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+      <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Settings</h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Max Attendees</label>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Max Attendees <span class="text-red-500">*</span></label>
           <input type="number" name="max_attendees" min="1" value="{{ data.max_attendees }}" required
-                 class="w-full px-3 py-2 border {% if errors.max_attendees %}border-red-400{% else %}border-gray-300{% endif %} rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          {% if errors.max_attendees %}<p class="text-xs text-red-600 mt-1">{{ errors.max_attendees }}</p>{% endif %}
+                 placeholder="e.g. 500"
+                 class="w-full px-3 py-2.5 border {% if errors.max_attendees %}border-red-400 bg-red-50{% else %}border-gray-300{% endif %} rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+          {% if errors.max_attendees %}<p class="text-xs text-red-600 mt-1.5">{{ errors.max_attendees }}</p>{% endif %}
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-          <select name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-            <option value="draft" {% if data.status == "draft" %}selected{% endif %}>Draft</option>
-            <option value="published" {% if data.status == "published" %}selected{% endif %}>Published</option>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">Status</label>
+          <select name="status"
+                  class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+            <option value="draft" {% if data.status == "draft" %}selected{% endif %}>Draft — only visible to you</option>
+            <option value="published" {% if data.status == "published" %}selected{% endif %}>Published — visible to everyone</option>
             <option value="cancelled" {% if data.status == "cancelled" %}selected{% endif %}>Cancelled</option>
           </select>
         </div>
       </div>
+    </div>
 
-      <div class="flex flex-col sm:flex-row gap-3 pt-2">
-        <button type="submit"
-                class="w-full sm:w-auto bg-indigo-600 text-white text-sm font-medium px-6 py-3 rounded-lg hover:bg-indigo-700">
-          {% if action == "edit" %}Save Changes{% else %}Create Event{% endif %}
-        </button>
-        <a href="{% if action == 'edit' %}/events/{{ event.slug }}/{% else %}/events/{% endif %}"
-           class="w-full sm:w-auto text-center text-sm text-gray-600 border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50">
-          Cancel
-        </a>
-      </div>
-    </form>
-  </div>
+    <!-- Actions -->
+    <div class="flex flex-col sm:flex-row gap-3">
+      <button type="submit"
+              class="sm:w-auto bg-indigo-600 text-white text-sm font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+        {% if action == "edit" %}Save Changes{% else %}Create Event{% endif %}
+      </button>
+      <a href="{% if action == 'edit' %}/events/{{ event.slug }}/{% else %}/events/{% endif %}"
+         class="sm:w-auto text-center text-sm font-medium text-gray-600 border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors">
+        Cancel
+      </a>
+    </div>
+
+  </form>
 </div>
 {% endblock %}

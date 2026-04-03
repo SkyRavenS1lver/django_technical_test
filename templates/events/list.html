@@ -2,14 +2,18 @@
 {% block title %}Events — EventHub{% endblock %}
 
 {% block content %}
-<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+<div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
   <div>
     <h1 class="text-2xl font-bold text-gray-900">Events</h1>
-    <p class="text-sm text-gray-500 mt-1">Browse upcoming technical conferences</p>
+    <p class="text-sm text-gray-500 mt-1">Browse upcoming conferences and workshops</p>
   </div>
   {% if user.is_organizer %}
-    <a href="/events/create/" class="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-medium px-4 py-3 rounded-lg hover:bg-indigo-700">
-      + New Event
+    <a href="/events/create/"
+       class="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-indigo-700 transition-colors shrink-0">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+      </svg>
+      New Event
     </a>
   {% endif %}
 </div>
