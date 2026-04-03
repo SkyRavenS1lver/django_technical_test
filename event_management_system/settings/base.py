@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "theme",
     # Local
     "app.accounts",
+    "app.events",
 ]
 
 MIDDLEWARE = [
