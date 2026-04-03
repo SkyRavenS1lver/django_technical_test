@@ -1,0 +1,23 @@
+<a href="/events/{{ event.slug }}/" class="block bg-white rounded-xl border border-gray-200 hover:shadow-md transition-shadow overflow-hidden">
+  {% if event.banner %}
+    <img src="{{ event.banner.url }}" alt="{{ event.title }}" class="w-full h-40 object-cover">
+  {% else %}
+    <div class="w-full h-40 bg-indigo-50 flex items-center justify-center">
+      <span class="text-indigo-300 text-4xl">📅</span>
+    </div>
+  {% endif %}
+  <div class="p-4">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-xs font-medium px-2 py-1 rounded-full
+        {% if event.status == 'published' %}bg-green-100 text-green-700
+        {% elif event.status == 'draft' %}bg-yellow-100 text-yellow-700
+        {% else %}bg-red-100 text-red-700{% endif %}">
+        {{ event.get_status_display }}
+      </span>
+      <span class="text-xs text-gray-400">{{ event.max_attendees }} seats</span>
+    </div>
+    <h3 class="font-semibold text-gray-900 leading-snug">{{ event.title }}</h3>
+    <p class="text-xs text-gray-500 mt-1">{{ event.venue_name }}</p>
+    <p class="text-xs text-gray-400 mt-2">{{ event.start_date|date:"M d, Y" }} — {{ event.end_date|date:"M d, Y" }}</p>
+  </div>
+</a>

@@ -14,7 +14,8 @@ urlpatterns = [
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/v1/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     # Frontend pages
-    path("", RedirectView.as_view(url="/dashboard/", permanent=False), name="index"),
+    path("", RedirectView.as_view(url="/events/", permanent=False), name="index"),
+    path("events/", include("app.events.page_urls")),
     path("auth/", include("app.accounts.page_urls")),
     path("dashboard/", include("app.accounts.dashboard_urls")),
 ]

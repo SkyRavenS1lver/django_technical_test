@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Events — EventHub{% endblock %}
+
+{% block content %}
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Events</h1>
+    <p class="text-sm text-gray-500 mt-1">Browse upcoming technical conferences</p>
+  </div>
+  {% if user.is_organizer %}
+    <a href="/events/create/" class="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-medium px-4 py-3 rounded-lg hover:bg-indigo-700">
+      + New Event
+    </a>
+  {% endif %}
+</div>
+
+<div id="event-list">
+  {% include "events/partials/event_list.html" %}
+</div>
+{% endblock %}
