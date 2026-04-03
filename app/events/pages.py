@@ -44,7 +44,7 @@ class EventCreateView(LoginRequiredMixin, View):
     def get(self, request):
         if not request.user.is_organizer:
             return redirect("/events/")
-        return render(request, "events/form.html", {"action": "create"})
+        return render(request, "events/form.html", {"action": "create", "event": None, "data": {"status": "draft"}})
 
     def post(self, request):
         if not request.user.is_organizer:
@@ -54,7 +54,7 @@ class EventCreateView(LoginRequiredMixin, View):
         errors = {f: "This field is required." for f in _REQUIRED_FIELDS if not data[f]}
 
         if errors:
-            return render(request, "events/form.html", {"action": "create", "data": data, "errors": errors})
+            return render(request, "events/form.html", {"action": "create", "data": data, "errors": errors, "event": None})
 
         try:
             event = Event(organizer=request.user, **data)
@@ -62,7 +62,7 @@ class EventCreateView(LoginRequiredMixin, View):
             event.save()
         except ValidationError as e:
             errors.update({f: msgs[0] for f, msgs in e.message_dict.items()})
-            return render(request, "events/form.html", {"action": "create", "data": data, "errors": errors})
+            return render(request, "events/form.html", {"action": "create", "data": data, "errors": errors, "event": None})
 
         return htmx_redirect(f"/events/{event.slug}/")
 
@@ -74,7 +74,17 @@ class EventUpdateView(LoginRequiredMixin, View):
         event = get_object_or_404(Event, slug=slug)
         if event.organizer != request.user:
             return redirect(f"/events/{slug}/")
-        return render(request, "events/form.html", {"action": "edit", "event": event})
+        data = {
+            "title": event.title,
+            "description": event.description,
+            "start_date": event.start_date.strftime("%Y-%m-%dT%H:%M") if event.start_date else "",
+            "end_date": event.end_date.strftime("%Y-%m-%dT%H:%M") if event.end_date else "",
+            "venue_name": event.venue_name,
+            "venue_address": event.venue_address or "",
+            "max_attendees": str(event.max_attendees) if event.max_attendees is not None else "",
+            "status": event.status,
+        }
+        return render(request, "events/form.html", {"action": "edit", "event": event, "data": data})
 
     def post(self, request, slug):
         event = get_object_or_404(Event, slug=slug)
