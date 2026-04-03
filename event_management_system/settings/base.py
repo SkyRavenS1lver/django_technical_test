@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     # Local
     "app.accounts",
     "app.events",
+    "app.tracks",
 ]
 
 MIDDLEWARE = [
