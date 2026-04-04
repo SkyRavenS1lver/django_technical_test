@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from app.accounts.permissions import IsEventOrganizer, IsOrganizer
+from app.sessions.serializers import SessionSerializer
 from app.tracks.serializers import TrackSerializer
 
 from .filters import EventFilter
@@ -62,3 +63,12 @@ class EventViewSet(ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(event=event)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=["get"], url_path="sessions", permission_classes=[permissions.AllowAny])
+    def sessions(self, request, slug=None):
+        event = self.get_object()
+        from app.sessions.models import Session
+        sessions = Session.objects.filter(
+            track__event=event
+        ).select_related("track", "speaker").order_by("start_time")
+        return Response(SessionSerializer(sessions, many=True).data)
