@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "app.events",
     "app.tracks",
     "app.sessions",
+    "app.registrations",
 ]
 
 MIDDLEWARE = [
