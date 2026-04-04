@@ -29,11 +29,18 @@ class EventListView(View):
 
 class EventDetailView(View):
     def get(self, request, slug):
+        from app.sessions.models import Session
         event = get_object_or_404(
             Event.objects.select_related("organizer").prefetch_related("tracks"),
             slug=slug,
         )
-        return render(request, "events/detail.html", {"event": event})
+        sessions = (
+            Session.objects
+            .filter(track__event=event)
+            .select_related("track", "speaker")
+            .order_by("start_time")
+        )
+        return render(request, "events/detail.html", {"event": event, "sessions": sessions})
 
 
 class EventCreateView(LoginRequiredMixin, View):
