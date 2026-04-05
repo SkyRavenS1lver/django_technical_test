@@ -30,6 +30,7 @@ class EventListView(View):
 class EventDetailView(View):
     def get(self, request, slug):
         from app.sessions.models import Session
+        from app.registrations.models import Registration
         event = get_object_or_404(
             Event.objects.select_related("organizer").prefetch_related("tracks"),
             slug=slug,
@@ -40,7 +41,14 @@ class EventDetailView(View):
             .select_related("track", "speaker")
             .order_by("start_time")
         )
-        return render(request, "events/detail.html", {"event": event, "sessions": sessions})
+        registration = None
+        if request.user.is_authenticated:
+            registration = Registration.objects.filter(attendee=request.user, event=event).first()
+        return render(request, "events/detail.html", {
+            "event": event,
+            "sessions": sessions,
+            "registration": registration,
+        })
 
 
 class EventCreateView(LoginRequiredMixin, View):

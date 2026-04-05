@@ -66,4 +66,15 @@ class DashboardView(View):
     def get(self, request):
         if not request.user.is_authenticated:
             return redirect("/auth/login/?next=/dashboard/")
-        return render(request, "dashboard/index.html")
+        from app.registrations.models import Registration
+        from app.events.models import Event
+        context = {
+            "my_registrations": Registration.objects.filter(
+                attendee=request.user
+            ).select_related("event").order_by("-registered_at"),
+        }
+        if request.user.is_organizer:
+            context["organized_events"] = Event.objects.filter(
+                organizer=request.user
+            ).order_by("-created_at")
+        return render(request, "dashboard/index.html", context)
