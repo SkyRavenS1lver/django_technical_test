@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
-from rest_framework import generics, permissions, status
+from drf_spectacular.utils import extend_schema, inline_serializer
+from rest_framework import generics, permissions, serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -39,6 +40,10 @@ class MeView(generics.RetrieveUpdateAPIView):
 class LogoutView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
+    @extend_schema(
+        request=inline_serializer("LogoutSerializer", fields={"refresh": serializers.CharField()}),
+        responses={204: None},
+    )
     def post(self, request):
         try:
             refresh_token = request.data["refresh"]

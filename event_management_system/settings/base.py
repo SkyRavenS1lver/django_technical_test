@@ -119,6 +119,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
+    "DEFAULT_VERSION": "v1",
+    "ALLOWED_VERSIONS": ["v1"],
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.AnonRateThrottle",
         "rest_framework.throttling.UserRateThrottle",
@@ -146,6 +148,11 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "API for managing technical events and conferences",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    "ENUM_NAME_OVERRIDES": {
+        "EventStatusEnum": "app.events.models.Event.Status",
+        "RegistrationStatusEnum": "app.registrations.models.Registration.Status",
+        "SessionTypeEnum": "app.sessions.models.Session.SessionType",
+    },
 }
 
 LOGGING = {

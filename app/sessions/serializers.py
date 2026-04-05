@@ -28,7 +28,7 @@ class SessionSerializer(serializers.ModelSerializer):
             "effective_capacity",
         )
 
-    def get_effective_capacity(self, obj):
+    def get_effective_capacity(self, obj) -> int | None:
         if obj.capacity is not None:
             return obj.capacity
         try:
