@@ -19,6 +19,7 @@ urlpatterns = [
     path("", RedirectView.as_view(url="/events/", permanent=False), name="index"),
     path("events/", include("app.events.page_urls")),
     path("", include("app.sessions.page_urls")),
+    path("", include("app.tracks.page_urls")),
     path("auth/", include("app.accounts.page_urls")),
     path("dashboard/", include("app.accounts.dashboard_urls")),
 ]

@@ -109,20 +109,37 @@
   </div>
 
   <!-- Tracks -->
-  {% if event.tracks.all %}
   <div class="bg-white rounded-xl border border-gray-200 p-6 mb-6">
-    <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-4">Tracks</h2>
-    <div class="flex flex-wrap gap-2">
-      {% for track in event.tracks.all %}
-        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium text-white"
-              style="background-color: {{ track.color }}">
-          <span class="w-1.5 h-1.5 rounded-full bg-white opacity-60"></span>
-          {{ track.name }}
-        </span>
-      {% endfor %}
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-sm font-semibold text-gray-400 uppercase tracking-wide">Tracks</h2>
+      {% if user == event.organizer %}
+        <a href="/events/{{ event.slug }}/tracks/create/"
+           class="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-800 transition-colors">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+          </svg>
+          Add Track
+        </a>
+      {% endif %}
     </div>
+    {% if event.tracks.all %}
+      <div class="flex flex-wrap gap-2">
+        {% for track in event.tracks.all %}
+          <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium text-white"
+                style="background-color: {{ track.color }}">
+            <span class="w-1.5 h-1.5 rounded-full bg-white opacity-60"></span>
+            {{ track.name }}
+            {% if user == event.organizer %}
+              <a href="/events/{{ event.slug }}/tracks/{{ track.pk }}/edit/"
+                 class="opacity-70 hover:opacity-100 transition-opacity text-white ml-1 text-xs underline">edit</a>
+            {% endif %}
+          </span>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-sm text-gray-400">No tracks yet.{% if user == event.organizer %} <a href="/events/{{ event.slug }}/tracks/create/" class="text-indigo-600 hover:text-indigo-800">Add one</a>.{% endif %}</p>
+    {% endif %}
   </div>
-  {% endif %}
 
   <!-- Sessions -->
   <div class="bg-white rounded-xl border border-gray-200 p-6">
