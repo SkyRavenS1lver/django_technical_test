@@ -72,3 +72,23 @@ class EventViewSet(ModelViewSet):
             track__event=event
         ).select_related("track", "speaker").order_by("start_time")
         return Response(SessionSerializer(sessions, many=True).data)
+
+    @action(detail=True, methods=["post"], url_path="register", permission_classes=[permissions.IsAuthenticated])
+    def register(self, request, slug=None):
+        event = self.get_object()
+        from app.registrations.serializers import RegistrationSerializer
+        serializer = RegistrationSerializer(
+            data={"event": event.slug},
+            context={"request": request},
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=["get"], url_path="registrations", permission_classes=[permissions.IsAuthenticated, IsEventOrganizer])
+    def registrations(self, request, slug=None):
+        event = self.get_object()
+        from app.registrations.models import Registration
+        from app.registrations.serializers import RegistrationSerializer
+        regs = Registration.objects.filter(event=event).select_related("attendee").order_by("-registered_at")
+        return Response(RegistrationSerializer(regs, many=True, context={"request": request}).data)
