@@ -32,6 +32,13 @@ class SessionViewSet(ModelViewSet):
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated(), IsEventOrganizer()]
 
+    def perform_create(self, serializer):
+        track = serializer.validated_data["track"]
+        if track.event.organizer != self.request.user:
+            from rest_framework.exceptions import PermissionDenied
+            raise PermissionDenied("Only the event organizer can add sessions.")
+        serializer.save()
+
     def get_object(self):
         obj = super().get_object()
         obj.organizer = obj.track.event.organizer

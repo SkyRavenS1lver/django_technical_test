@@ -49,7 +49,7 @@ class EventViewSet(ModelViewSet):
         serializer.save(organizer=self.request.user)
 
     @action(detail=True, methods=["get", "post"], url_path="tracks", permission_classes=[permissions.IsAuthenticatedOrReadOnly])
-    def tracks(self, request, slug=None):
+    def tracks(self, request, slug=None, **kwargs):
         event = self.get_object()
         if request.method == "GET":
             tracks = event.tracks.all()
@@ -61,11 +61,18 @@ class EventViewSet(ModelViewSet):
 
         serializer = TrackSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save(event=event)
+        from django.db import IntegrityError
+        try:
+            serializer.save(event=event)
+        except IntegrityError:
+            return Response(
+                {"name": ["A track with this name already exists for this event."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["get"], url_path="sessions", permission_classes=[permissions.AllowAny])
-    def sessions(self, request, slug=None):
+    def sessions(self, request, slug=None, **kwargs):
         event = self.get_object()
         from app.sessions.models import Session
         sessions = Session.objects.filter(
@@ -74,7 +81,7 @@ class EventViewSet(ModelViewSet):
         return Response(SessionSerializer(sessions, many=True).data)
 
     @action(detail=True, methods=["post"], url_path="register", permission_classes=[permissions.IsAuthenticated])
-    def register(self, request, slug=None):
+    def register(self, request, slug=None, **kwargs):
         event = self.get_object()
         from app.registrations.serializers import RegistrationSerializer
         serializer = RegistrationSerializer(
@@ -86,7 +93,7 @@ class EventViewSet(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True, methods=["get"], url_path="registrations", permission_classes=[permissions.IsAuthenticated, IsEventOrganizer])
-    def registrations(self, request, slug=None):
+    def registrations(self, request, slug=None, **kwargs):
         event = self.get_object()
         from app.registrations.models import Registration
         from app.registrations.serializers import RegistrationSerializer
