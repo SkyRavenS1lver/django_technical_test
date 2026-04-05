@@ -5,14 +5,18 @@ from django.urls import include, path
 from django.views.generic import RedirectView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+api_urlpatterns = [
+    path("", include("app.accounts.urls")),
+    path("", include("app.events.urls")),
+    path("", include("app.tracks.urls")),
+    path("", include("app.sessions.urls")),
+    path("", include("app.registrations.urls")),
+]
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # API v1
-    path("api/v1/", include("app.accounts.urls")),
-    path("api/v1/", include("app.events.urls")),
-    path("api/v1/", include("app.tracks.urls")),
-    path("api/v1/", include("app.sessions.urls")),
-    path("api/v1/", include("app.registrations.urls")),
+    # Versioned API — e.g. /api/v1/events/
+    path("api/<version>/", include(api_urlpatterns)),
     # API docs
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/v1/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
