@@ -1,13 +1,19 @@
 {% extends "base.html" %}
-{% block title %}Login — EventHub{% endblock %}
+{% block title %}Sign In — EventHub{% endblock %}
 
 {% block content %}
-<div class="min-h-[70vh] flex items-center justify-center">
+<div class="min-h-[80vh] flex items-center justify-center py-8">
   <div class="w-full max-w-md">
-    <h1 class="text-2xl font-bold text-gray-900 text-center mb-8">Sign in to your account</h1>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-      <div id="form-error" class="hidden mb-4 p-3 bg-red-50 text-red-700 text-sm rounded-md border border-red-200"></div>
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <div class="inline-flex w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 items-center justify-center text-white text-2xl font-bold shadow-lg mb-4">E</div>
+      <h1 class="text-2xl font-bold text-slate-900 dark:text-slate-50">Welcome back! 👋</h1>
+      <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Sign in to discover and join amazing events</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8">
+      <div id="form-error" class="hidden mb-5 flex items-start gap-3 p-4 bg-rose-50 dark:bg-rose-950 text-rose-700 dark:text-rose-300 text-sm rounded-xl border border-rose-200 dark:border-rose-800"></div>
 
       <form id="login-form"
             hx-post="/auth/login/submit/"
@@ -18,28 +24,37 @@
         {% csrf_token %}
 
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <label for="email" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            Email address
+          </label>
           <input type="email" id="email" name="email" required autocomplete="email"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                 placeholder="you@example.com"
+                 class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
         </div>
 
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <label for="password" class="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            Password
+          </label>
           <input type="password" id="password" name="password" required autocomplete="current-password"
-                 class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                 placeholder="••••••••"
+                 class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition">
         </div>
 
         <button id="login-btn" type="submit"
-                class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-indigo-700 disabled:opacity-50">
+                class="w-full py-3 px-4 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:shadow-lg hover:shadow-violet-200 dark:hover:shadow-violet-900 hover:opacity-90 disabled:opacity-50 transition-all">
           Sign in
         </button>
       </form>
 
-      <p class="mt-5 text-center text-sm text-gray-500">
+      <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
         Don't have an account?
-        <a href="/auth/register/" class="text-indigo-600 hover:text-indigo-800 font-medium">Register</a>
+        <a href="/auth/register/" class="font-semibold text-violet-600 dark:text-violet-400 hover:text-violet-800 dark:hover:text-violet-300 transition-colors">
+          Create one free ✨
+        </a>
       </p>
     </div>
+
   </div>
 </div>
 {% endblock %}

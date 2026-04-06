@@ -1,10 +1,13 @@
 <div id="registration-btn">
   {% if user == event.organizer %}
     {# Organiser doesn't register for their own event #}
+    <span class="inline-flex items-center gap-2 text-sm font-medium text-slate-400 dark:text-slate-500 bg-slate-100 dark:bg-slate-800 px-5 py-2.5 rounded-xl">
+      🎤 You're organising this event
+    </span>
   {% elif not user.is_authenticated %}
     <a href="/auth/login/?next=/events/{{ event.slug }}/"
-       class="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
-      Register
+       class="inline-flex items-center gap-2 text-sm font-bold px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md hover:shadow-lg hover:shadow-violet-200 dark:hover:shadow-violet-900 hover:opacity-90 transition-all">
+      🎟️ Register for this event
     </a>
   {% elif not registration or registration.status == 'cancelled' %}
     <form method="post" action="/events/{{ event.slug }}/register/"
@@ -13,43 +16,40 @@
           hx-swap="outerHTML">
       {% csrf_token %}
       <button type="submit"
-              class="inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
-        Register
+              class="inline-flex items-center gap-2 text-sm font-bold px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-md hover:shadow-lg hover:shadow-violet-200 dark:hover:shadow-violet-900 hover:opacity-90 transition-all">
+        🎟️ Register for this event
       </button>
     </form>
   {% elif registration.status == 'confirmed' %}
-    <div class="flex items-center gap-3">
-      <span class="inline-flex items-center gap-1.5 text-sm font-medium text-green-700 bg-green-50 border border-green-200 px-4 py-2.5 rounded-lg">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-        </svg>
-        Registered
+    <div class="flex flex-wrap items-center gap-3">
+      <span class="inline-flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+        ✅ You're registered!
       </span>
       <form method="post" action="/events/{{ event.slug }}/cancel-registration/"
             hx-post="/events/{{ event.slug }}/cancel-registration/"
             hx-target="#registration-btn"
             hx-swap="outerHTML">
         {% csrf_token %}
-        <button type="submit" class="text-xs text-gray-400 hover:text-red-500 transition-colors">
-          Cancel
+        <button type="submit"
+                class="text-xs font-medium text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors underline underline-offset-2">
+          Cancel registration
         </button>
       </form>
     </div>
   {% elif registration.status == 'waitlisted' %}
-    <div class="flex items-center gap-3">
-      <span class="inline-flex items-center gap-1.5 text-sm font-medium text-amber-700 bg-amber-50 border border-amber-200 px-4 py-2.5 rounded-lg">
-        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-        </svg>
-        On Waitlist
+    <div class="flex flex-wrap items-center gap-3">
+      <span class="inline-flex items-center gap-2 text-sm font-bold px-5 py-2.5 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+        ⏳ You're on the waitlist
       </span>
+      <p class="text-xs text-slate-400 dark:text-slate-500">We'll notify you if a spot opens up.</p>
       <form method="post" action="/events/{{ event.slug }}/cancel-registration/"
             hx-post="/events/{{ event.slug }}/cancel-registration/"
             hx-target="#registration-btn"
             hx-swap="outerHTML">
         {% csrf_token %}
-        <button type="submit" class="text-xs text-gray-400 hover:text-red-500 transition-colors">
-          Cancel
+        <button type="submit"
+                class="text-xs font-medium text-slate-400 dark:text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors underline underline-offset-2">
+          Leave waitlist
         </button>
       </form>
     </div>

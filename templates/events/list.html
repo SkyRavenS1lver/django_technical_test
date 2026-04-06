@@ -1,24 +1,31 @@
 {% extends "base.html" %}
-{% block title %}Events — EventHub{% endblock %}
+{% block title %}Discover Events — EventHub{% endblock %}
 
 {% block content %}
-<div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
-  <div>
-    <h1 class="text-2xl font-bold text-gray-900">Events</h1>
-    <p class="text-sm text-gray-500 mt-1">Browse upcoming conferences and workshops</p>
+
+<!-- Hero -->
+<div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 p-8 sm:p-12 mb-10 text-white shadow-xl">
+  <div class="relative z-10">
+    <p class="text-violet-200 text-sm font-medium mb-2">🌍 Discover what's happening</p>
+    <h1 class="text-3xl sm:text-4xl font-bold leading-tight mb-2">Find your next<br class="hidden sm:block"> favourite event</h1>
+    <p class="text-violet-200 text-sm sm:text-base mt-2 max-w-lg">Conferences, workshops, meetups — all in one place. Register in seconds.</p>
+    {% if user.is_organizer %}
+      <a href="/events/create/"
+         class="mt-6 inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-bold bg-white text-violet-700 hover:bg-violet-50 shadow-lg hover:shadow-xl transition-all">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+        </svg>
+        Create an Event
+      </a>
+    {% endif %}
   </div>
-  {% if user.is_organizer %}
-    <a href="/events/create/"
-       class="inline-flex items-center gap-2 bg-indigo-600 text-white text-sm font-semibold px-4 py-2.5 rounded-lg hover:bg-indigo-700 transition-colors shrink-0">
-      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
-      </svg>
-      New Event
-    </a>
-  {% endif %}
+  <div class="absolute -right-10 -top-10 w-52 h-52 rounded-full bg-white/5"></div>
+  <div class="absolute -right-4 -bottom-16 w-72 h-72 rounded-full bg-white/5"></div>
+  <div class="absolute left-1/2 top-0 w-24 h-24 rounded-full bg-white/5"></div>
 </div>
 
 <div id="event-list">
   {% include "events/partials/event_list.html" %}
 </div>
+
 {% endblock %}
