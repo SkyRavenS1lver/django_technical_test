@@ -7,6 +7,11 @@ python manage.py wait_for_db
 echo "==> Running migrations..."
 python manage.py migrate --noinput
 
+if [ "${SEED_DATA:-false}" = "true" ]; then
+    echo "==> Seeding database..."
+    python manage.py seed_data
+fi
+
 echo "==> Collecting static files..."
 python manage.py collectstatic --noinput
 
