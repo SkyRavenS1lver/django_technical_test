@@ -55,6 +55,10 @@ class Session(models.Model):
 
     class Meta:
         ordering = ["start_time"]
+        indexes = [
+            models.Index(fields=["start_time"]),
+            models.Index(fields=["session_type"]),
+        ]
         constraints = [
             models.CheckConstraint(
                 condition=models.Q(end_time__gt=models.F("start_time")),

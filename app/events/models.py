@@ -30,6 +30,11 @@ class Event(models.Model):
 
     class Meta:
         ordering = ["-start_date"]
+        indexes = [
+            models.Index(fields=["status"]),
+            models.Index(fields=["start_date"]),
+            models.Index(fields=["organizer"]),
+        ]
         constraints = [
             models.CheckConstraint(
                 condition=models.Q(end_date__gt=models.F("start_date")),

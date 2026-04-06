@@ -1,4 +1,13 @@
 services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   db:
     image: postgres:16-alpine
     restart: unless-stopped
@@ -23,9 +32,12 @@ services:
     env_file: .env
     environment:
       DB_HOST: db
+      REDIS_URL: redis://redis:6379/1
       DJANGO_SETTINGS_MODULE: event_management_system.settings.production
     depends_on:
       db:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     volumes:
       - media_data:/app/media

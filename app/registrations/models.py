@@ -25,6 +25,9 @@ class Registration(models.Model):
 
     class Meta:
         ordering = ["-registered_at"]
+        indexes = [
+            models.Index(fields=["status"]),
+        ]
         constraints = [
             models.UniqueConstraint(
                 fields=["attendee", "event"], name="unique_registration"
