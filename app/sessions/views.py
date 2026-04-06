@@ -1,5 +1,9 @@
+import logging
+
 from rest_framework import permissions
 from rest_framework.viewsets import ModelViewSet
+
+logger = logging.getLogger(__name__)
 
 from app.accounts.permissions import IsEventOrganizer
 
@@ -37,7 +41,8 @@ class SessionViewSet(ModelViewSet):
         if track.event.organizer != self.request.user:
             from rest_framework.exceptions import PermissionDenied
             raise PermissionDenied("Only the event organizer can add sessions.")
-        serializer.save()
+        session = serializer.save()
+        logger.info("Session created: '%s' in track '%s' by %s", session.title, track.name, self.request.user.email)
 
     def get_object(self):
         obj = super().get_object()

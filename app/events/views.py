@@ -1,7 +1,11 @@
+import logging
+
 from rest_framework import permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
+logger = logging.getLogger(__name__)
 
 from app.accounts.permissions import IsEventOrganizer, IsOrganizer
 from app.sessions.serializers import SessionSerializer
@@ -46,7 +50,8 @@ class EventViewSet(ModelViewSet):
         return EventListSerializer
 
     def perform_create(self, serializer):
-        serializer.save(organizer=self.request.user)
+        event = serializer.save(organizer=self.request.user)
+        logger.info("Event created: '%s' by %s", event.title, self.request.user.email)
 
     @action(detail=True, methods=["get", "post"], url_path="tracks", permission_classes=[permissions.IsAuthenticatedOrReadOnly])
     def tracks(self, request, slug=None, **kwargs):

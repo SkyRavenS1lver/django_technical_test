@@ -18,3 +18,6 @@ REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {  # noqa: F405
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+LOGGING["root"]["level"] = "DEBUG"
+LOGGING["loggers"]["app"]["level"] = "DEBUG"
