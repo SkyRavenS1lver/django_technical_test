@@ -33,7 +33,7 @@ A RESTful API and frontend for managing technical events and conferences, built 
 
 ## Features
 
-- **Event Management** — CRUD with status (`draft` / `published` / `cancelled`), capacity, venue, and banner image
+- **Event Management** — CRUD with organiser-controlled status (`draft` / `published` / `cancelled`) and **time-derived display states** (`Upcoming` / `Ongoing` / `Finished`) computed automatically from start/end dates
 - **Track Management** — Organise sessions into colour-coded tracks per event
 - **Session Scheduling** — Schedule sessions with speaker, room, and type; **overlap detection** prevents double-booking within a track
 - **Attendee Registration** — Register for events; automatic **waitlist** when at capacity; duplicate prevention
@@ -281,6 +281,7 @@ app/<name>/
 | `select_related` / `prefetch_related` on all list queries | Prevents N+1 queries on event lists with organiser and track data |
 | URL path versioning (`/api/<version>/`) | Allows future `/api/v2/` without breaking existing clients |
 | Tailwind pre-built in Docker Stage 1 | Eliminates Node.js from the production runtime image |
+| `display_status` computed property (not a DB field) | "Ongoing" and "Finished" are time-derived, not organiser decisions — keeping them out of the DB avoids stale data and manual updates |
 
 ### Caching
 

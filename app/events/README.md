@@ -36,6 +36,18 @@ Slug is set once on first save and never auto-updated (stable URLs).
 | Organiser | `published` + own `draft` / `cancelled` |
 | Staff | All |
 
+## Display Status (computed property)
+
+`status` is the **organiser's intent** — a value they explicitly set. `display_status` is a **read-only property** that derives the UI state from real time, so organizers never have to manually mark events as finished.
+
+| `display_status` | Condition |
+|---|---|
+| `upcoming` | published + now < start_date |
+| `ongoing` | published + start_date ≤ now ≤ end_date |
+| `finished` | published + now > end_date |
+| `draft` | status == draft |
+| `cancelled` | status == cancelled |
+
 ## API Actions
 
 Standard CRUD at `/api/<version>/events/{slug}/` plus nested actions:
