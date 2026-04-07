@@ -333,7 +333,7 @@ An entity-relationship diagram covering all five app models is available in `doc
 Generated with:
 
 ```bash
-python manage.py graph_models accounts events registrations sessions tracks -o docs/erd.dot
+python manage.py graph_models accounts events registrations event_sessions tracks -o docs/erd.dot
 ```
 
 Rendered to PNG via `dot -Tpng docs/erd.dot -o docs/erd.png` (Graphviz 14.1.4).

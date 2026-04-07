@@ -1,7 +1,7 @@
 digraph model_graph {
   // Dotfile by Django-Extensions graph_models
-  // Created: 2026-04-07 09:14
-  // Cli Options: accounts events registrations sessions tracks -o docs/erd.dot
+  // Created: 2026-04-07 09:26
+  // Cli Options: accounts events registrations event_sessions tracks -o docs/erd.dot
 
   fontname = "Roboto"
   fontsize = 8
@@ -416,16 +416,122 @@ digraph model_graph {
 
 
 
-  django_contrib_sessions_base_session_AbstractBaseSession [label=<
+  app_sessions_models_Speaker [label=<
     <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
     <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
     <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
-    AbstractBaseSession
+    Speaker
     </B></FONT></TD></TR>
   
   
     <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Roboto">expire_date</FONT>
+    <FONT FACE="Roboto"><B>id</B></FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Roboto"><B>BigAutoField</B></FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT COLOR="#7B7B7B" FACE="Roboto"><B>user</B></FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT COLOR="#7B7B7B" FACE="Roboto"><B>ForeignKey (id)</B></FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Roboto">bio</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Roboto">TextField</FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT COLOR="#7B7B7B" FACE="Roboto">company</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT COLOR="#7B7B7B" FACE="Roboto">CharField</FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Roboto">name</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Roboto">CharField</FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT COLOR="#7B7B7B" FACE="Roboto">photo</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT COLOR="#7B7B7B" FACE="Roboto">ImageField</FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT COLOR="#7B7B7B" FACE="Roboto">website</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT COLOR="#7B7B7B" FACE="Roboto">URLField</FONT>
+    </TD></TR>
+  
+  
+    </TABLE>
+    >]
+
+  app_sessions_models_Session [label=<
+    <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
+    <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
+    <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
+    Session
+    </B></FONT></TD></TR>
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Roboto"><B>id</B></FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Roboto"><B>BigAutoField</B></FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT COLOR="#7B7B7B" FACE="Roboto"><B>speaker</B></FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT COLOR="#7B7B7B" FACE="Roboto"><B>ForeignKey (id)</B></FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Roboto"><B>track</B></FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Roboto"><B>ForeignKey (id)</B></FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT COLOR="#7B7B7B" FACE="Roboto">capacity</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT COLOR="#7B7B7B" FACE="Roboto">PositiveIntegerField</FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Roboto">description</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Roboto">TextField</FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Roboto">end_time</FONT>
     </TD><TD ALIGN="LEFT">
     <FONT FACE="Roboto">DateTimeField</FONT>
     </TD></TR>
@@ -433,43 +539,33 @@ digraph model_graph {
   
   
     <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Roboto">session_data</FONT>
+    <FONT COLOR="#7B7B7B" FACE="Roboto">room</FONT>
     </TD><TD ALIGN="LEFT">
-    <FONT FACE="Roboto">TextField</FONT>
-    </TD></TR>
-  
-  
-    </TABLE>
-    >]
-
-  django_contrib_sessions_models_Session [label=<
-    <TABLE BGCOLOR="white" BORDER="1" CELLBORDER="0" CELLSPACING="0">
-    <TR><TD COLSPAN="2" CELLPADDING="5" ALIGN="CENTER" BGCOLOR="#1b563f">
-    <FONT FACE="Roboto" COLOR="white" POINT-SIZE="10"><B>
-    Session<BR/>&lt;<FONT FACE="Roboto"><I>AbstractBaseSession</I></FONT>&gt;
-    </B></FONT></TD></TR>
-  
-  
-    <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Roboto"><I><B>session_key</B></I></FONT>
-    </TD><TD ALIGN="LEFT">
-    <FONT FACE="Roboto"><I><B>CharField</B></I></FONT>
+    <FONT COLOR="#7B7B7B" FACE="Roboto">CharField</FONT>
     </TD></TR>
   
   
   
     <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Roboto"><I>expire_date</I></FONT>
+    <FONT FACE="Roboto">session_type</FONT>
     </TD><TD ALIGN="LEFT">
-    <FONT FACE="Roboto"><I>DateTimeField</I></FONT>
+    <FONT FACE="Roboto">CharField</FONT>
     </TD></TR>
   
   
   
     <TR><TD ALIGN="LEFT" BORDER="0">
-    <FONT FACE="Roboto"><I>session_data</I></FONT>
+    <FONT FACE="Roboto">start_time</FONT>
     </TD><TD ALIGN="LEFT">
-    <FONT FACE="Roboto"><I>TextField</I></FONT>
+    <FONT FACE="Roboto">DateTimeField</FONT>
+    </TD></TR>
+  
+  
+  
+    <TR><TD ALIGN="LEFT" BORDER="0">
+    <FONT FACE="Roboto">title</FONT>
+    </TD><TD ALIGN="LEFT">
+    <FONT FACE="Roboto">CharField</FONT>
     </TD></TR>
   
   
@@ -585,8 +681,14 @@ digraph model_graph {
   [label=" event (registrations)"] [arrowhead=none, arrowtail=dot, dir=both];
 
 
-  django_contrib_sessions_models_Session -> django_contrib_sessions_base_session_AbstractBaseSession
-  [label=" abstract\ninheritance"] [arrowhead=empty, arrowtail=none, dir=both];
+  app_sessions_models_Speaker -> app_accounts_models_User
+  [label=" user (speaker_profiles)"] [arrowhead=none, arrowtail=dot, dir=both];
+
+  app_sessions_models_Session -> app_tracks_models_Track
+  [label=" track (sessions)"] [arrowhead=none, arrowtail=dot, dir=both];
+
+  app_sessions_models_Session -> app_sessions_models_Speaker
+  [label=" speaker (sessions)"] [arrowhead=none, arrowtail=dot, dir=both];
 
 
   app_tracks_models_Track -> app_events_models_Event
