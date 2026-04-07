@@ -13,6 +13,7 @@ A RESTful API and frontend for managing technical events and conferences, built 
 - [API Reference](#api-reference)
 - [Testing](#testing)
 - [Architecture & Decisions](#architecture--decisions)
+- [Database Schema](#database-schema)
 - [Third-party Libraries](#third-party-libraries)
 
 ---
@@ -315,6 +316,28 @@ Key business events are logged in each app's `views.py`:
 - `app.registrations` — registration confirmed / waitlisted / cancelled
 
 Logs are written to both the console and `logs/app.log` via a `RotatingFileHandler` (10 MB max, 5 backups). In development, the log level is lowered to `DEBUG` for all `app.*` loggers.
+
+---
+
+## Database Schema
+
+An entity-relationship diagram covering all five app models is available in `docs/`:
+
+| File | Description |
+|---|---|
+| [`docs/erd.png`](docs/erd.png) | Rendered ERD image |
+| [`docs/erd.dot`](docs/erd.dot) | GraphViz DOT source |
+
+![Database ERD](docs/erd.png)
+
+Generated with:
+
+```bash
+python manage.py graph_models accounts events registrations sessions tracks -o docs/erd.dot
+```
+
+Rendered to PNG via `dot -Tpng docs/erd.dot -o docs/erd.png` (Graphviz 14.1.4).
+Requires `django-extensions` and `pydot` from `requirements-dev.txt`.
 
 ---
 
