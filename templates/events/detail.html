@@ -211,9 +211,14 @@
     </div>
     <script>
       function filterSessions(type) {
-        document.querySelectorAll('[data-session-type]').forEach(el => {
-          el.style.display = (type === 'all' || el.dataset.sessionType === type) ? '' : 'none';
+        const rows = document.querySelectorAll('[data-session-type]');
+        let visible = 0;
+        rows.forEach(el => {
+          const show = type === 'all' || el.dataset.sessionType === type;
+          el.style.display = show ? '' : 'none';
+          if (show) visible++;
         });
+        document.getElementById('session-empty').style.display = visible === 0 ? '' : 'none';
         document.querySelectorAll('.session-filter-btn').forEach(btn => {
           const active = btn.dataset.filter === type;
           btn.classList.toggle('bg-violet-600', active);
@@ -275,6 +280,13 @@
             {% endif %}
           </div>
         {% endfor %}
+
+        <!-- Empty state shown by JS when filter matches nothing -->
+        <div id="session-empty" style="display:none" class="text-center py-10">
+          <p class="text-3xl mb-3">🔍</p>
+          <p class="text-sm font-semibold text-slate-600 dark:text-slate-400">No sessions of this type</p>
+          <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Try a different filter or view all sessions</p>
+        </div>
       </div>
     {% else %}
       <div class="text-center py-10">
