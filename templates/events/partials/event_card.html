@@ -5,11 +5,17 @@
     <img src="{{ event.banner.url }}" alt="{{ event.title }}" class="w-full h-44 object-cover">
   {% else %}
     <div class="w-full h-44 flex flex-col items-center justify-center gap-2 relative
-      {% if event.status == 'published' %}bg-gradient-to-br from-violet-500 via-indigo-500 to-blue-500
-      {% elif event.status == 'draft' %}bg-gradient-to-br from-amber-400 via-orange-400 to-yellow-400
-      {% else %}bg-gradient-to-br from-slate-400 to-slate-500{% endif %}">
+      {% if event.display_status == 'upcoming' %}bg-gradient-to-br from-violet-500 via-indigo-500 to-blue-500
+      {% elif event.display_status == 'ongoing' %}bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500
+      {% elif event.display_status == 'finished' %}bg-gradient-to-br from-slate-400 to-slate-500
+      {% elif event.display_status == 'draft' %}bg-gradient-to-br from-amber-400 via-orange-400 to-yellow-400
+      {% else %}bg-gradient-to-br from-red-400 to-rose-500{% endif %}">
       <span class="text-4xl opacity-80 group-hover:scale-110 transition-transform duration-300">
-        {% if event.status == 'published' %}🎉{% elif event.status == 'draft' %}📝{% else %}🚫{% endif %}
+        {% if event.display_status == 'upcoming' %}🎉
+        {% elif event.display_status == 'ongoing' %}⚡
+        {% elif event.display_status == 'finished' %}✅
+        {% elif event.display_status == 'draft' %}📝
+        {% else %}🚫{% endif %}
       </span>
       <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
     </div>
@@ -19,11 +25,16 @@
     <!-- Status + seats row -->
     <div class="flex items-center justify-between mb-3">
       <span class="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full
-        {% if event.status == 'published' %}bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300
-        {% elif event.status == 'draft' %}bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300
+        {% if event.display_status == 'upcoming' %}bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300
+        {% elif event.display_status == 'ongoing' %}bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300
+        {% elif event.display_status == 'finished' %}bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400
+        {% elif event.display_status == 'draft' %}bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300
         {% else %}bg-red-100 dark:bg-red-950 text-red-700 dark:text-red-300{% endif %}">
-        {% if event.status == 'published' %}🟢{% elif event.status == 'draft' %}🟡{% else %}🔴{% endif %}
-        {{ event.get_status_display }}
+        {% if event.display_status == 'upcoming' %}🟢 Upcoming
+        {% elif event.display_status == 'ongoing' %}🔵 Ongoing
+        {% elif event.display_status == 'finished' %}⚫ Finished
+        {% elif event.display_status == 'draft' %}🟡 Draft
+        {% else %}🔴 Cancelled{% endif %}
       </span>
       <span class="text-xs font-medium text-slate-400 dark:text-slate-500 flex items-center gap-1">
         👥 {{ event.max_attendees }}

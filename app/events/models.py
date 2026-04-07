@@ -42,6 +42,20 @@ class Event(models.Model):
             )
         ]
 
+    @property
+    def display_status(self):
+        #Derived display state based on time.
+        from django.utils import timezone
+
+        now = timezone.now()
+        if self.status != self.Status.PUBLISHED:
+            return self.status  # 'draft' or 'cancelled'
+        if now < self.start_date:
+            return "upcoming"
+        if now <= self.end_date:
+            return "ongoing"
+        return "finished"
+
     def __str__(self):
         return self.title
 
