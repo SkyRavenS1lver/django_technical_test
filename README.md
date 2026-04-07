@@ -40,7 +40,9 @@ A RESTful API and frontend for managing technical events and conferences, built 
 - **Role-based permissions** — Organiser vs. attendee; JWT-secured API; rate limiting (100/hr anon, 1000/hr authenticated)
 - **API Versioning** — URL path versioning (`/api/v1/`, `/api/v2/`, …)
 - **Interactive Docs** — Swagger UI at `/api/v1/docs/`
-- **HTMX Frontend** — Full template-driven UI with live registration button swaps
+- **HTMX Frontend** — Full template-driven UI with live registration button swaps, debounced search, and filter pills
+- **Event Filtering** — Search by title/venue + filter pills (Upcoming / Ongoing / Finished / My Drafts) backed by date-range ORM queries; HTMX partial refresh, no full page reload
+- **Session Filtering** — Client-side session type filter pills (Keynote / Workshop / Panel / Talk) on the event detail page
 
 ---
 
@@ -207,6 +209,17 @@ Sessions support:
 ```
 GET /api/v1/sessions/?track=1&session_type=keynote
 GET /api/v1/sessions/?start_from=2025-01-01T09:00:00Z
+```
+
+The frontend event list page also supports search and filtering via URL params (HTMX-powered, no full page reload):
+
+```
+/events/?search=django
+/events/?filter=upcoming
+/events/?filter=ongoing
+/events/?filter=finished
+/events/?filter=draft        # organizers only
+/events/?search=conf&filter=upcoming
 ```
 
 ---

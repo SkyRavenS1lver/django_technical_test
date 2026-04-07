@@ -21,10 +21,45 @@ def _event_queryset(user):
 
 class EventListView(View):
     def get(self, request):
+        from django.utils import timezone
+
         events = _event_queryset(request.user)
+        search = request.GET.get("search", "").strip()
+        active_filter = request.GET.get("filter", "all")
+
+        if search:
+            events = events.filter(
+                Q(title__icontains=search) | Q(venue_name__icontains=search)
+            )
+
+        now = timezone.now()
+        if active_filter == "upcoming":
+            events = events.filter(status=Event.Status.PUBLISHED, start_date__gt=now)
+        elif active_filter == "ongoing":
+            events = events.filter(status=Event.Status.PUBLISHED, start_date__lte=now, end_date__gte=now)
+        elif active_filter == "finished":
+            events = events.filter(status=Event.Status.PUBLISHED, end_date__lt=now)
+        elif active_filter == "draft" and request.user.is_authenticated and request.user.is_organizer:
+            events = events.filter(status=Event.Status.DRAFT)
+
+        filter_pills = [
+            ("all", "All", "✨"),
+            ("upcoming", "Upcoming", "🟢"),
+            ("ongoing", "Ongoing", "🔵"),
+            ("finished", "Finished", "⚫"),
+        ]
+        if request.user.is_authenticated and request.user.is_organizer:
+            filter_pills.append(("draft", "My Drafts", "🟡"))
+
+        context = {
+            "events": events,
+            "search": search,
+            "active_filter": active_filter,
+            "filter_pills": filter_pills,
+        }
         if request.htmx:
-            return render(request, "events/partials/event_list.html", {"events": events})
-        return render(request, "events/list.html", {"events": events})
+            return render(request, "events/partials/event_list.html", context)
+        return render(request, "events/list.html", context)
 
 
 class EventDetailView(View):

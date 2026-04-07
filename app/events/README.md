@@ -48,6 +48,25 @@ Slug is set once on first save and never auto-updated (stable URLs).
 | `draft` | status == draft |
 | `cancelled` | status == cancelled |
 
+## Frontend Filtering (EventListView)
+
+`pages.py` reads two GET params and applies them to the queryset before rendering:
+
+| Param | Values | Behaviour |
+|---|---|---|
+| `search` | any string | `contains` on `title` and `venue_name` |
+| `filter` | `all` (default) | No extra constraint |
+| | `upcoming` | `status=published` + `start_date > now` |
+| | `ongoing` | `status=published` + `start_date ≤ now ≤ end_date` |
+| | `finished` | `status=published` + `end_date < now` |
+| | `draft` | `status=draft` (organizers only) |
+
+HTMX triggers a partial refresh of `#event-list` on search input (300ms debounce) and on filter pill change — no full page reload. The load more button preserves active search and filter params in its URL.
+
+## Session Type Filtering (detail page)
+
+Sessions on the event detail page can be filtered by type (Keynote / Workshop / Panel / Talk) via client-side JavaScript. No extra request is made — all sessions are already in the DOM and toggled by `data-session-type` attribute.
+
 ## API Actions
 
 Standard CRUD at `/api/<version>/events/{slug}/` plus nested actions:

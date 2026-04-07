@@ -170,7 +170,7 @@
 
   <!-- Sessions -->
   <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-4">
       <h2 class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest flex items-center gap-2">
         <span>🗓️</span> Sessions
       </h2>
@@ -186,9 +186,53 @@
     </div>
 
     {% if sessions %}
+    <!-- Session type filter pills -->
+    <div class="flex flex-wrap gap-2 mb-5" id="session-filters">
+      <button onclick="filterSessions('all')" data-filter="all"
+              class="session-filter-btn active-filter inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold border-2 border-violet-600 bg-violet-600 text-white transition-all">
+        ✨ All
+      </button>
+      <button onclick="filterSessions('keynote')" data-filter="keynote"
+              class="session-filter-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold border-2 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-violet-400 hover:text-violet-600 dark:hover:text-violet-400 transition-all">
+        🎤 Keynote
+      </button>
+      <button onclick="filterSessions('workshop')" data-filter="workshop"
+              class="session-filter-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold border-2 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-violet-400 hover:text-violet-600 dark:hover:text-violet-400 transition-all">
+        🛠️ Workshop
+      </button>
+      <button onclick="filterSessions('panel')" data-filter="panel"
+              class="session-filter-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold border-2 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-violet-400 hover:text-violet-600 dark:hover:text-violet-400 transition-all">
+        💬 Panel
+      </button>
+      <button onclick="filterSessions('talk')" data-filter="talk"
+              class="session-filter-btn inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold border-2 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-violet-400 hover:text-violet-600 dark:hover:text-violet-400 transition-all">
+        🗣️ Talk
+      </button>
+    </div>
+    <script>
+      function filterSessions(type) {
+        document.querySelectorAll('[data-session-type]').forEach(el => {
+          el.style.display = (type === 'all' || el.dataset.sessionType === type) ? '' : 'none';
+        });
+        document.querySelectorAll('.session-filter-btn').forEach(btn => {
+          const active = btn.dataset.filter === type;
+          btn.classList.toggle('bg-violet-600', active);
+          btn.classList.toggle('border-violet-600', active);
+          btn.classList.toggle('text-white', active);
+          btn.classList.toggle('border-slate-200', !active);
+          btn.classList.toggle('dark:border-slate-700', !active);
+          btn.classList.toggle('text-slate-600', !active);
+          btn.classList.toggle('dark:text-slate-400', !active);
+        });
+      }
+    </script>
+    {% endif %}
+
+    {% if sessions %}
       <div class="space-y-3">
         {% for session in sessions %}
-          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 hover:bg-violet-50 dark:hover:bg-violet-950/30 transition-colors group">
+          <div class="flex gap-4 p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 hover:bg-violet-50 dark:hover:bg-violet-950/30 transition-colors group"
+               data-session-type="{{ session.session_type }}">
 
             <!-- Time column -->
             <div class="shrink-0 w-16 text-center pt-0.5">

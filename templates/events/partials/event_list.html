@@ -18,7 +18,7 @@
 
 {% if page_obj.has_next %}
   <div class="mt-10 text-center">
-    <button hx-get="?page={{ page_obj.next_page_number }}"
+    <button hx-get="?page={{ page_obj.next_page_number }}{% if search %}&search={{ search }}{% endif %}{% if active_filter and active_filter != 'all' %}&filter={{ active_filter }}{% endif %}"
             hx-target="#event-list"
             hx-swap="outerHTML"
             class="px-8 py-3 rounded-xl text-sm font-semibold border-2 border-violet-200 dark:border-violet-800 text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950 hover:border-violet-400 transition-all">
