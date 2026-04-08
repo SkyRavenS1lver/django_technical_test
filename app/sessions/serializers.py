@@ -59,7 +59,7 @@ class SessionSerializer(serializers.ModelSerializer):
                     overlapping = overlapping.exclude(pk=instance.pk)
                 if overlapping.exists():
                     raise serializers.ValidationError(
-                        "This session overlaps with an existing session in the same track."
+                        {"start_time": "This session overlaps with an existing session in the same track."}
                     )
 
         return data

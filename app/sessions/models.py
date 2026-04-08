@@ -70,16 +70,25 @@ class Session(models.Model):
         return self.title
 
     def clean(self):
-        if self.start_time and self.end_time and self.end_time <= self.start_time:
-            raise ValidationError({"end_time": "End time must be after start time."})
+        from django.db.models.fields import DateTimeField as DTField
+        dt = DTField()
+        try:
+            start = dt.to_python(self.start_time)
+            end = dt.to_python(self.end_time)
+        except (ValueError, TypeError):
+            return  # let clean_fields() report the format error
 
-        if self.track_id and self.start_time and self.end_time:
-            overlapping = Session.objects.filter(
-                track_id=self.track_id,
-                start_time__lt=self.end_time,
-                end_time__gt=self.start_time,
-            ).exclude(pk=self.pk)
-            if overlapping.exists():
-                raise ValidationError(
-                    "This session overlaps with an existing session in the same track."
-                )
+        if start and end:
+            if end <= start:
+                raise ValidationError({"end_time": "End time must be after start time."})
+
+            if self.track_id:
+                overlapping = Session.objects.filter(
+                    track_id=self.track_id,
+                    start_time__lt=end,
+                    end_time__gt=start,
+                ).exclude(pk=self.pk)
+                if overlapping.exists():
+                    raise ValidationError(
+                        {"start_time": "This session overlaps with an existing session in the same track."}
+                    )
