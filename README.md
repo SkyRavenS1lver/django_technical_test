@@ -26,8 +26,9 @@ A RESTful API and frontend for managing technical events and conferences, built 
 | Auth | JWT via `djangorestframework-simplejwt` |
 | Database | PostgreSQL 16 |
 | Frontend | Django Templates + HTMX + Tailwind CSS v4 |
-| API Docs | drf-spectacular (OpenAPI 3.0 / Swagger UI) |
-| Container | Docker + Docker Compose |
+| API Docs | drf-spectacular (OpenAPI 3.0 / Swagger UI) + GraphViz (ERD) |
+| Container | Docker |
+| Cache | Redis |
 
 ---
 
